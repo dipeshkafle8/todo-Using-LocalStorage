@@ -2,8 +2,22 @@ let inputTask=document.querySelector('#inputTask');
 let addBtn=document.querySelector('#addtask');
 let displayTask=document.querySelector('#displayTask');
 let i=1;
+let taskArr=[];
 
-console.log("Hello");
+
+//to store the value in LocalStorage
+function setLocalStorage(){
+localStorage.setItem('tasklists',JSON.stringify(taskArr));
+}
+
+//on reload get items from the localStorage and create task;
+function getLocalStorageItems(){
+  taskArr=JSON.parse(localStorage.getItem('tasklists'));
+}
+
+
+
+
 //to add task on Ui
 function addTask(data){
     console.log(data);
@@ -13,21 +27,45 @@ function addTask(data){
 
     let checkBox=document.createElement('input');
     checkBox.setAttribute("type","checkbox");
-
-    checkBox.addEventListener('click',()=>{
-      if(checkBox.checked==true){
-        data.status="completed";
-        span.style.textDecoration="line-through";
-      }else{
-        span.style.textDecoration="none";
-      }
-    })
-
-
-    let crossBtn=document.createElement('button');
+    let crossBtn=document.createElement('button'); 
     let editBtn=document.createElement('button');
     crossBtn.innerText="del";
     editBtn.innerText="edit";
+
+     //on clicking on check box
+     checkBox.addEventListener('click',()=>{
+      if(checkBox.checked==true){        
+        span.style.textDecoration="line-through";
+        taskArr=taskArr.map((value)=>{
+          if(value.id==data.id){
+            value.status="completed";
+          }
+          return value;
+        })
+        setLocalStorage();
+      }
+      else{
+        span.style.textDecoration="none";
+        taskArr=taskArr.map((value)=>{
+          if(value.id==data.id){
+            value.status="pending";
+          }
+          return value;
+        })
+        setLocalStorage();
+      }
+      
+    });
+     
+
+    //delete task
+    crossBtn.addEventListener('click',(event)=>{
+      taskdiv.remove();
+      taskArr=taskArr.filter((value)=>{
+        return value.id!=data.id;
+      })
+      setLocalStorage();    
+    })
     span.innerText=data.name;
     taskdiv.append(span,checkBox,crossBtn,editBtn);
     displayTask.append(taskdiv);
@@ -45,6 +83,9 @@ let obj={
     id:i
 }
 i++;
+taskArr.push(obj);
+console.log(taskArr);
+setLocalStorage();
 addTask(obj);
 }
 else{
@@ -66,3 +107,18 @@ inputTask.addEventListener('keypress',(event)=>{
 addBtn.addEventListener('click',()=>{
       getData();
 })
+
+//on reloading or loading page
+function loadTasksIntoPage(){
+  getLocalStorageItems();  
+  if(taskArr.length!=0){
+  taskArr.forEach((value)=>{
+    i=value.id;    
+    addTask(value);
+  })
+  i++;
+}
+
+}
+
+loadTasksIntoPage();
