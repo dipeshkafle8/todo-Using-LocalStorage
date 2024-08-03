@@ -38,29 +38,23 @@ function addTask(data){
     }
      //on clicking on check box
      checkBox.addEventListener('click',()=>{
+      let newStatus="pending"
       if(checkBox.checked==true){        
         span.style.textDecoration="line-through";
-        taskArr=taskArr.map((value)=>{
-          if(value.id==data.id){
-            value.status="completed";
-          }
-          return value;
-        })
-        setLocalStorage();
+        newStatus="completed";
       }
       else{
         span.style.textDecoration="none";
+      }
+
         taskArr=taskArr.map((value)=>{
           if(value.id==data.id){
-            value.status="pending";
+            value.status=newStatus;
           }
           return value;
         })
-        setLocalStorage();
-      }
-      
-    });
-     
+        setLocalStorage();      
+    });     
 
     //delete task
     crossBtn.addEventListener('click',(event)=>{
@@ -70,6 +64,12 @@ function addTask(data){
       })
       setLocalStorage();    
     })
+
+    //edit task
+    editBtn.addEventListener('click',()=>{
+      
+    })
+
     span.innerText=data.name;
     taskdiv.append(span,checkBox,crossBtn,editBtn);
     displayTask.append(taskdiv);
