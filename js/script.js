@@ -19,8 +19,7 @@ function getLocalStorageItems(){
 
 
 //to add task on Ui
-function addTask(data){
-    console.log(data);
+function addTask(data){    
     let taskdiv=document.createElement('div');
 
     let span=document.createElement("span");
@@ -32,6 +31,11 @@ function addTask(data){
     crossBtn.innerText="del";
     editBtn.innerText="edit";
 
+    //if task is completed(in case of tasks coming from localStorage)
+    if(data.status=="completed"){
+     checkBox.checked=true;
+     span.style.textDecoration="line-through";
+    }
      //on clicking on check box
      checkBox.addEventListener('click',()=>{
       if(checkBox.checked==true){        
