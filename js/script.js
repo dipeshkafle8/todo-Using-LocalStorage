@@ -3,6 +3,9 @@ let addBtn=document.querySelector('#addtask');
 let displayTask=document.querySelector('#displayTask');
 let i=1;
 let taskArr=[];
+let isEdit=false;
+let spanForEdit;
+let idOfEdit;
 
 
 //to store the value in LocalStorage
@@ -67,7 +70,10 @@ function addTask(data){
 
     //edit task
     editBtn.addEventListener('click',()=>{
-      
+      inputTask.value=data.name;
+      isEdit=true; 
+      spanForEdit=span;
+      idOfEdit=data.id;   
     })
 
     span.innerText=data.name;
@@ -76,7 +82,19 @@ function addTask(data){
 
 }
 
-
+//handling data display and storing in array on click on edit
+function handleDataonEdit(){
+  spanForEdit.innerText=inputTask.value;
+  taskArr=taskArr.map((value)=>{
+    if(idOfEdit==value.id){
+      value.name=inputTask.value;
+    }
+    return value;
+  })
+  isEdit=false;
+  inputTask.value="";
+  setLocalStorage();
+}
 
 //getting data and storing it
 function getData(){
@@ -102,14 +120,22 @@ inputTask.value="";
 
 //adding event listener for Enter press
 inputTask.addEventListener('keypress',(event)=>{   
-        if(event.key=="Enter"){
+        if(event.key=="Enter" && isEdit==false){
          getData();
+        }
+        else if(event.key=="Enter" && isEdit==true){
+          handleDataonEdit();
         }    
 })
 
 //adding event listener for clicking button
 addBtn.addEventListener('click',()=>{
+  if(isEdit!=true){
       getData();
+  }
+  else{
+    handleDataonEdit();
+  }
 })
 
 //on reloading or loading page
