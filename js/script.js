@@ -96,7 +96,7 @@ function handleDataonEdit(){
   setLocalStorage();
 }
 
-//getting data and storing it
+//getting data from input box and storing it 
 function getData(){
     if(inputTask.value.trim()!=""){
 let obj={
