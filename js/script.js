@@ -24,7 +24,6 @@ function getLocalStorageItems(){
 //to add task on Ui
 function addTask(data){    
     let taskdiv=document.createElement('div');
-
     let span=document.createElement("span");
 
     let checkBox=document.createElement('input');
